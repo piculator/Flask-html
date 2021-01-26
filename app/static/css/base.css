@@ -1,0 +1,74 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#container {
+    min-height:100%;
+    height: auto !important;
+    position: relative;
+}
+
+
+.nav {
+    background-color: #1dcaa7;
+}
+
+.nav_bottom > li {
+    color: gainsboro;
+    display: inline;
+    text-align: right;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.nav_right_box {
+    text-align: right;
+}
+
+.nav > table {
+    width:100%;
+    padding:10px 5%;
+}
+
+a.base {
+    color: white;
+    word-wrap: break-word;
+    text-decoration: none;
+}
+
+a.base:hover,
+a.base:focus {
+    color: #7b7b7b;
+    text-decoration: none;
+    outline: 0;
+}
+
+.content {
+    margin: 5%
+}
+
+#page {
+    margin: 0 auto;
+    padding-bottom: 200px;
+}
+
+#footer {
+    background-color: #2f2f2f;
+    display: flex;
+    position: absolute;
+    height: 200px;
+    width: 100%;
+}
+
+.row {
+    margin: 20px 5%;
+    width: 100%;
+}
+
+.footer_col {
+    color: white;
+    width: 33.3%;
+    float: left;
+}

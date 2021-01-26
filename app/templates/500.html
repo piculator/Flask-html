@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>An unexpected error has occurred</h1>
+    <p>管理员正在尝试修复</p>
+    <p>给您带来的不便，敬请谅解！</p>
+    <br>
+    <p><a href="{{ url_for('index') }}">返回主页</a></p>
+{% endblock %}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=0px">
+
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>欢迎使用Piculator!</title>
+    {% endif %}
+
+	<!-- Custom styles for this template -->
+	<link href="{{url_for('static', filename ='css/base.css')}}" rel="stylesheet">
+
+</head>
+
+<body style="background-color:azure"><div id="container">
+	<div class="nav">
+		<table><tr>
+			<td><div>
+				<a class="base" href="{{ url_for('index') }}" id="index">
+					<img src="{{url_for('static', filename ='img/piculator_banner.png')}}" width=200>
+				</a>
+			</div></td>
+			<td class="nav_right_box"><div>
+				<ul class="nav_bottom">
+					<li>
+						<a class="base" href="{{ url_for('index') }}" id="index">主页</a>
+					</li>
+					{% if current_user.is_anonymous %}
+					<li>
+						<a class="base" href="{{ url_for('login') }}">登录</a>，新用户请<a class="base" href="{{ url_for('register') }}">注册</a>
+					</li>
+					{% else %}
+					<li>
+						<a class="base" href="{{ url_for('user', username=current_user.username) }}">
+							<span>个人中心</span>
+						</a>
+					</li>
+					<li>
+						<a class="base" href="{{ url_for('logout') }}">
+							<span>注销账户</span>
+						</a>
+					</li>
+					{% endif %}
+				</ul>
+			</div></td>
+		</tr></table>
+	</div>
+
+	<div id="page">
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		<ul>
+			<p>消息提醒：</p>
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		{% endwith %}
+
+		<div class="content">
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+
+
+	<div id="footer">
+		<div class="row">
+			<div class="footer_col">
+				<h4>项目</h4>
+				<p>
+					山东大学(威海)2020级<br>
+					数据科学与人工智能实验班<br>
+					图形计算器小组<br>
+				</p>
+			</div>
+			
+			<div class="footer_col">
+				<h4>备案</h4>
+				<p>
+					备案号：123456
+				</p>
+			</div>
+			
+			<div class="footer_col">
+				<h4>关注我们</h4>
+				<p><a class="base" href="https://github.com/piculator">Github项目</a></p>
+				<p><a class="base" href="https://www.sdu.edu.cn/">山东大学官网</a></p>
+				
+			</div>
+		</div>
+	</div>
+</div></body>
+</html>
