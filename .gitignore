@@ -1,13 +1,10 @@
 # 一些生成的中间文件和日志文件
 __pycache__/
 logs/
-.flaskenv
 app/__pycache__/
 
-# app/static用于存放需要使用的资源文件
-# 但css是代码，需要上传到云端
+# app/static用于存放需要使用的资源文件，如css等
 app/static/
-!app/static/css
 
 # 虚拟环境
 .venv/
