@@ -8,3 +8,6 @@ app/static/
 
 # 虚拟环境
 .venv/
+
+# resource用于存放一些资源，不需上传
+resource/
