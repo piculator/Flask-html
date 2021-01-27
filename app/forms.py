@@ -11,21 +11,26 @@ class LoginForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
-    email = StringField('邮箱', validators=[DataRequired(), Email()])
+    # email = StringField('邮箱', validators=[DataRequired(), Email()])
     password = PasswordField('密码', validators=[DataRequired()])
     password2 = PasswordField(
         '确认密码', validators=[DataRequired(), EqualTo('password')])
+    accept = BooleanField('我同意服务条款', )
     submit = SubmitField('点此注册')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('用户名已被使用，请换一个用户名')
+    
+    def validate_accept(self):
+        if not accept:
+            raise ValidationError('须同意服务条款才可注册')
 
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError('邮箱已被注册')
+    # def validate_email(self, email):
+    #     user = User.query.filter_by(email=email.data).first()
+    #     if user is not None:
+    #         raise ValidationError('邮箱已被注册')
 
 class EditProfileForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
