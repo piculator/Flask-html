@@ -5,7 +5,7 @@ logs/
 app/__pycache__/
 
 # app/static用于存放需要使用的资源文件
-# 但css是代码，需要长期保存
+# 但css是代码，需要上传到云端
 app/static/
 !app/static/css
 
