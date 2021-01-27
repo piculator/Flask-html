@@ -11,3 +11,6 @@ app/static/
 
 # resource用于存放一些资源，不需上传
 resource/
+
+# migrations用于存放数据库，不需上传
+migrations/
