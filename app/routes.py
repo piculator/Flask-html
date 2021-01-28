@@ -26,7 +26,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home Page', posts=posts)
+    return render_template('index.html', title='图形计算器主页', posts=posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -43,7 +43,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='用户登录', form=form)
 
 @app.route('/logout')
 def logout():
@@ -62,7 +62,7 @@ def register():
         db.session.commit()
         flash('恭喜，您已经成功注册Piculator会员！')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='用户注册', form=form)
 
 @app.route('/user/<username>')
 @login_required
@@ -80,6 +80,7 @@ def edit_profile():
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
+        current_user.gender = form.username.gender
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash('Your changes have been saved.')

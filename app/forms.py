@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, RadioField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -15,6 +15,9 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('密码', validators=[DataRequired()])
     password2 = PasswordField(
         '确认密码', validators=[DataRequired(), EqualTo('password')])
+    identity = SelectField('您的身份是', choices=[
+        ('student','学生'),('teacher','教师'),('other','其他')
+    ], validators=[DataRequired()])
     accept = BooleanField('我同意服务条款', )
     submit = SubmitField('点此注册')
 
@@ -34,6 +37,9 @@ class RegistrationForm(FlaskForm):
 
 class EditProfileForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
+    gender = RadioField('性别', choices=[
+        ('M','男'),('F','女'),('S','保密')
+    ], validators=[DataRequired()]) #M,F,S for male,female,secret
     about_me = TextAreaField('个人简介', validators=[Length(min=0, max=140)])
     submit = SubmitField('提交')
 
