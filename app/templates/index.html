@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+    <h1>你好，{{ current_user.username }}！</h1>
+    <div><p>欢迎使用山东大学图形计算器！</p></div>
+    <ul>
+        <li><a href="#">Python编译器</a></li>
+        <li><a href="#">交互式计算</a></li>
+        <li><a href="#">基础功能</a></li>
+        <li><a href="#">帮助</a></li>
+    </ul>
 {% endblock %}
