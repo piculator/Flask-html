@@ -6,7 +6,7 @@ html, body {
 
 #container {
     min-height:100%;
-    height: auto !important;
+    height: auto;
     position: relative;
 }
 
@@ -58,8 +58,10 @@ a.base:focus {
     background-color: #2f2f2f;
     display: flex;
     position: absolute;
+    bottom: 0;  /* 确保footer在底部 */
     height: 200px;
     width: 100%;
+    clear: both;
 }
 
 .row {
