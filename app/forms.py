@@ -23,7 +23,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('用户名已被使用，请换一个用户名')
     
-    def validate_accept(self):
+    def validate_accept(self, accept):
         if not accept:
             raise ValidationError('须同意服务条款才可注册')
 
