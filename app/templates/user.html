@@ -2,13 +2,18 @@
 
 {% block content %}
 
-            <h1>{{ user.username }}的主页</h1>
-            <p>简介{% if user.about_me %}{{ user.about_me }}
-                {% else %}这个人很懒，什么都没有写~{% endif %}</p>
-            <br>
-            {% if user == current_user %}
-            <p><a href="{{ url_for('edit_profile') }}">编辑个人资料</a></p>
-            {% endif %}
+    <h1>{{ user.username }}的主页</h1>
+    <p>简介{% if user.about_me %}{{ user.about_me }}
+        {% else %}这个人很懒，什么都没有写~{% endif %}</p>
+    <br>
+    {% if user == current_user %}
+    <p><a href="{{ url_for('edit_profile') }}">编辑个人资料</a></p>
+    {% endif %}
 
     <hr>
+    {% if user == current_user %}
+    <h3>当前云端容量：{{cs}}/10 MB ({{cspercent}}%)</h3>
+    <br>
+    <p><a href="#">删除全部云端数据</a></p>
+    {% endif %}
 {% endblock %}

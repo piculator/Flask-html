@@ -6,6 +6,19 @@ from app.models import User
 from werkzeug.urls import url_parse
 from datetime import datetime
 
+# 定义一个进制转换函数
+def byte_trans(x):
+    byte_name=('','K','M','G','T','P')
+    i=0
+    while not x//1024==0:
+        i+=1
+        x/=1024
+    if i>5:
+        return '>1024 PB'
+    else:
+        return str(x)+' '+byte_name[i]+'B'
+
+
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
@@ -16,17 +29,7 @@ def before_request():
 @app.route('/index')
 @login_required
 def index():
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='图形计算器主页', posts=posts)
+    return render_template('index.html', title='图形计算器主页')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -68,11 +71,16 @@ def register():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
-    return render_template('user.html', user=user, posts=posts)
+    if user.CloudStorage:
+        cloud_storage = byte_trans(int(user.CloudStorage))
+        cspercent = user.CloudStorage / 104857.6
+    else:
+        cloud_storage = cspercent = 0
+    # posts = [
+    #     {'author': user, 'body': 'Test post #1'},
+    #     {'author': user, 'body': 'Test post #2'}
+    # ]
+    return render_template('user.html', user=user, cs=cloud_storage, cspercent=cspercent)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -80,7 +88,7 @@ def edit_profile():
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
-        current_user.gender = form.username.gender
+        current_user.gender = form.gender.data
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash('Your changes have been saved.')
