@@ -26,6 +26,15 @@
         {% endfor %}
     </p>
     <p>
+        您的身份是：
+        {% for subfield in form.identity %}
+            {{ subfield }} {{ subfield.label }} 
+        {% endfor %}
+        {% for error in form.identity.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
         {{ form.accept }} {{ form.accept.label }}<br>
         {% for error in form.accept.errors %}
         <span style="color: red;">[{{ error }}]</span>

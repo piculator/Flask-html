@@ -61,6 +61,7 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data)
         user.set_password(form.password.data)
+        user.identity = form.identity.data
         db.session.add(user)
         db.session.commit()
         flash('恭喜，您已经成功注册Piculator会员！')

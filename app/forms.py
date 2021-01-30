@@ -15,10 +15,10 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('密码', validators=[DataRequired()])
     password2 = PasswordField(
         '确认密码', validators=[DataRequired(), EqualTo('password')])
-    identity = SelectField('您的身份是', choices=[
-        ('student','学生'),('teacher','教师'),('other','其他')
+    identity = RadioField('您的身份是', choices=[
+        ('S','学生'),('T','教师'),('O','其他')
     ], validators=[DataRequired()])
-    accept = BooleanField('我同意服务条款', )
+    accept = BooleanField('我同意服务条款', validators=[DataRequired()])
     submit = SubmitField('点此注册')
 
     def validate_username(self, username):
@@ -26,9 +26,9 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('用户名已被使用，请换一个用户名')
     
-    def validate_accept(self, accept):
-        if not accept:
-            raise ValidationError('须同意服务条款才可注册')
+    # def validate_accept(self, accept):
+    #     if accept:
+    #         raise ValidationError('须同意服务条款才可注册')
 
     # def validate_email(self, email):
     #     user = User.query.filter_by(email=email.data).first()
