@@ -4,7 +4,6 @@ logs/
 app/__pycache__/
 
 # app/static用于存放需要使用的资源文件，如css等
-app/static/
 
 # 虚拟环境
 .venv/
