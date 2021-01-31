@@ -13,6 +13,7 @@ html, body {
 
 .nav {
     background-color: #1dcaa7;
+    height: 60px;
 }
 
 .nav_bottom > li {
@@ -29,7 +30,7 @@ html, body {
 
 .nav > table {
     width:100%;
-    padding:10px 5%;
+    padding:0 5%;
 }
 
 a.base {
@@ -46,7 +47,7 @@ a.base:focus {
 }
 
 .content {
-    margin: 5%
+    margin: 2% 5%
 }
 
 #page {
@@ -65,7 +66,7 @@ a.base:focus {
 }
 
 .row {
-    margin: 20px 5%;
+    margin: 10px 5%;
     width: 100%;
 }
 
