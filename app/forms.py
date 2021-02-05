@@ -3,6 +3,14 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
+import re
+
+#定义正则表达式
+def check_user(str1):
+    pattern = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]{5,19}$')
+    res = pattern.match(str1)
+    return bool(res)
+
 class LoginForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
     password = PasswordField('密码', validators=[DataRequired()])
@@ -22,6 +30,8 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('点此注册')
 
     def validate_username(self, username):
+        if not check_user(username.data):
+            raise ValidationError('用户名格式错误')
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('用户名已被使用，请换一个用户名')

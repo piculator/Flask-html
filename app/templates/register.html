@@ -6,7 +6,7 @@
     {{ form.hidden_tag() }}
     <p>
         {{ form.username.label }}<br>
-        {{ form.username(size=32) }}<br>
+        {{ form.username(size=32) }} 6~20位字母、数字和下划线，必须以字母开头<br>
         {% for error in form.username.errors %}
         <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
@@ -35,6 +35,7 @@
         {% endfor %}
     </p>
     <p>
+        请仔细阅读<a href="{{ url_for('service_item') }}" target="blank">用户服务条款</a><br>
         {{ form.accept }} {{ form.accept.label }}<br>
         {% for error in form.accept.errors %}
         <span style="color: red;">[{{ error }}]</span>
