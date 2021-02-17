@@ -16,6 +16,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('密码', validators=[DataRequired()])
     remember_me = BooleanField('记住我')
     submit = SubmitField('点此登录')
+    is_from_client = BooleaField('Client')
 
 class RegistrationForm(FlaskForm):
     username = StringField('用户名', validators=[DataRequired()])
