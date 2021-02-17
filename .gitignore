@@ -13,3 +13,6 @@ resource/
 
 # migrations用于存放数据库，不需上传
 migrations/
+
+#虚拟环境下一些库的配置文件
+!.venv/Lib/site-packages/flask_login/config.py
