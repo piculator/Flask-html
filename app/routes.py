@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, EditSecurityForm
 from flask_login import current_user, login_user, login_required, logout_user
 from app.models import User
 from werkzeug.urls import url_parse
@@ -31,6 +31,7 @@ def before_request():
 @app.route('/index')
 @login_required
 def index():
+    print(current_user)
     return render_template('index.html', title='图形计算器主页')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -122,16 +123,26 @@ def edit_profile():
 @app.route('/security/<username>')
 @login_required
 def account_security(username):
-    user = User.query.filter_by(username=username).first
     # 检测当前用户是否为注册用户
     if not current_user.username == username:
         return '提示：非法访问！'
     else:
         email = current_user.email
-        si = current_user.secret_insurance_problem
+        si = current_user.secret_insurance_question
 
         return render_template('account_security.html', title='账户安全',
         email=email, si=si)
-        
 
-
+@app.route('/edit_security')
+@login_required
+def edit_security():
+    form = EditSecurityForm(current_user.username)
+    if form.validate_on_submit():
+        current_user.email = form.email.data
+        current_user.secret_insurance_question = form.secret_insurance_question.data
+        current_user.secret_insurance_answer = form.about_me.data
+        db.session.commit()
+        flash('您的设置已经保存')
+        return redirect(url_for('edit_security'))
+    return render_template('edit_security.html', title='编辑邮箱和密保',
+                        form=form)

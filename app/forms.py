@@ -65,3 +65,17 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('此用户名已被使用')
+
+class EditSecurityForm(FlaskForm):
+    email = StringField('邮箱', validators=[Email()])
+    secret_insurance_question = StringField('密保问题', validators=[Length(min=0, max=20)])
+    secret_insurance_answer = StringField('答案', validators=[DataRequired()])
+    submit = SubmitField('修改密保')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        print(user)
+        print(user['username'])
+        if user is not None:
+            if user['username'] != current_user:
+                raise ValidationError('邮箱已被注册')

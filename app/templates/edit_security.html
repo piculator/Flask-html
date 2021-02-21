@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>账户安全</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=50) }}<br>
+            {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <br>
+        <p>
+            {{ form.secret_insurance_question.label }}<br>
+            <font>（密保问题需在20字内）</font><br>
+            {{ form.secret_insurance_question(size=40) }}<br>
+            {% for error in form.secret_insurance_question.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.secret_insurance_answer.label }}<br>
+            {{ form.secret_insurance_answer(size=40) }}<br>
+            {% for error in form.secret_insurance_answer.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
