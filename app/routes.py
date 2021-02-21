@@ -119,16 +119,19 @@ def edit_profile():
                            form=form)
 
 # 账户安全
-@app.route('/security/<username>', methods=['GET', 'POST'])
+@app.route('/security/<username>')
 @login_required
-def security():
+def account_security(username):
     user = User.query.filter_by(username=username).first
     # 检测当前用户是否为注册用户
-    if not current_user.username == user.username:
+    if not current_user.username == username:
         return '提示：非法访问！'
     else:
-        return render_template('account_security.html', title='Edit Profile',
-                        form=form)
+        email = current_user.email
+        si = current_user.secret_insurance_problem
+
+        return render_template('account_security.html', title='账户安全',
+        email=email, si=si)
         
 
 

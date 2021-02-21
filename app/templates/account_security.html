@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <link href="{{url_for('static', filename ='css/account_security.css')}}" rel="stylesheet">
+    <h1>账户安全</h1>
+    <h4>当前安全措施</h4>
+    <table>
+        <tr>
+            <td>
+                邮箱
+            </td>
+            <td>
+                {{ email }}
+            </td>
+            <td>
+                {% if email %}
+                    <font color="lime">√已验证</font>
+                {% else %}
+                    <font color="red">×未验证</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                密保
+            </td>
+            <td>
+                {{ si }}
+            </td>
+            <td>
+                {% if email %}
+                    <font color="lime">√已验证</font>
+                {% else %}
+                    <font color="red">×未验证</font>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <br>
+    <a href="#">更改邮箱或密保</a>
+{% endblock %}
