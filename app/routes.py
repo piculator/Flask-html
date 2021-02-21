@@ -20,7 +20,7 @@ def byte_trans(x):
     else:
         return '%.2f' % x+' '+byte_name[i]+'B'
 
-
+# 记录用户上次访问的时间
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
@@ -39,15 +39,24 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
+        #验证是否来自表单：
+        if form.is_from_client.data:
+            print('客户端的请求')
+            return 'Hello'
+        else:
+            user = User.query.filter_by(username=form.username.data).first()
+            if user is None:
+                flash('无效的用户名')
+                return redirect(url_for('login'))
+            elif not user.check_password(form.password.data):
+                flash('密码错误，请重新输入')
+                return redirect(url_for('login'))
+            else:
+                login_user(user, remember=form.remember_me.data)
+                next_page = request.args.get('next')
+                if not next_page or url_parse(next_page).netloc != '':
+                    next_page = url_for('index')
+                return redirect(next_page)
     return render_template('login.html', title='用户登录', form=form)
 
 @app.route('/logout')
@@ -78,19 +87,20 @@ def service_item():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    if user.CloudStorage:
-        cloud_storage = byte_trans(int(user.CloudStorage))
-        cspercent = '%.2f' % (user.CloudStorage / 104857.6)
+    if user.cloud_storage:
+        cloud_storage = byte_trans(int(user.cloud_storage))
+        cs_percent = '%.2f' % (user.CloudStorage / 104857.6)
     else:
-        cloud_storage = cspercent = 0
+        cloud_storage = cs_percent = 0
     # posts = [
     #     {'author': user, 'body': 'Test post #1'},
     #     {'author': user, 'body': 'Test post #2'}
     # ]
     return render_template('user.html', user=user, 
     cs=cloud_storage, 
-    cspercent=cspercent)
+    cspercent=cs_percent)
 
+# 编辑个人信息
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -105,5 +115,20 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile',
+    return render_template('edit_profile.html', title='编辑个人信息',
                            form=form)
+
+# 账户安全
+@app.route('/security/<username>', methods=['GET', 'POST'])
+@login_required
+def security():
+    user = User.query.filter_by(username=username).first
+    # 检测当前用户是否为注册用户
+    if not current_user.username == user.username:
+        return '提示：非法访问！'
+    else:
+        return render_template('account_security.html', title='Edit Profile',
+                        form=form)
+        
+
+

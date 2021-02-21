@@ -10,9 +10,11 @@ class User(UserMixin, db.Model):
     identity = db.Column(db.String(1))
     birthday = db.Column(db.DateTime)
     gender = db.Column(db.String(1))
-    email = db.Column(db.String(120), index=True, unique=True)
     about_me = db.Column(db.Unicode(140))
-    CloudStorage = db.Column(db.Integer)
+    cloud_storage = db.Column(db.Integer)
+    email = db.Column(db.String(120), index=True, unique=True)
+    secret_insurance_problem = db.Column(db.Unicode(20))
+    secret_insurance_answer_hash = db.Column(db.String(128))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

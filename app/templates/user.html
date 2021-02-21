@@ -4,7 +4,9 @@
 
     <link href="{{url_for('static', filename ='css/user.css')}}" rel="stylesheet">
     <h1>{{ user.username }}的主页</h1>
-    <p>简介{% if user.about_me %}{{ user.about_me }}
+    <h4>简介</h4>
+    <p>
+        {% if user.about_me %}{{ user.about_me }}
         {% else %}这个人很懒，什么都没有写~{% endif %}</p>
     <br>
     {% if user == current_user %}

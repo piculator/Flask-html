@@ -7,6 +7,7 @@ import re
 
 #定义正则表达式
 def check_user(str1):
+    # 匹配6~20位数字、字母、下划线，且以字母开头的字符串
     pattern = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]{5,19}$')
     res = pattern.match(str1)
     return bool(res)
@@ -16,10 +17,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('密码', validators=[DataRequired()])
     remember_me = BooleanField('记住我')
     submit = SubmitField('点此登录')
-    is_from_client = BooleaField('Client')
+    is_from_client = BooleanField('Client')
 
 class RegistrationForm(FlaskForm):
-    username = StringField('用户名', validators=[DataRequired()])
+    username = StringField('用户名', validators=[DataRequired(), Length(min=0, max=20)])
     # email = StringField('邮箱', validators=[DataRequired(), Email()])
     password = PasswordField('密码', validators=[DataRequired()])
     password2 = PasswordField(
@@ -29,6 +30,7 @@ class RegistrationForm(FlaskForm):
     ], validators=[DataRequired()])
     accept = BooleanField('我同意服务条款', validators=[DataRequired()])
     submit = SubmitField('点此注册')
+    is_from_client = BooleanField('Client')
 
     def validate_username(self, username):
         if not check_user(username.data):
