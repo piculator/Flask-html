@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, EditSecurityForm
+from app.forms import check_user
 from flask_login import current_user, login_user, login_required, logout_user
 from app.models import User
 from werkzeug.urls import url_parse
@@ -36,28 +37,34 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # 已登录的用户访问登录页，则弹回主界面
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
-    if form.validate_on_submit():
-        #验证是否来自表单：
-        if form.is_from_client.data:
-            print('客户端的请求')
-            return 'Hello'
+    # 验证是否来自客户端：
+    if form.is_from_client.data:
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None:
+            return {"is_logged_in":False, "reason":"无效的用户名"}
+        elif not user.check_password(form.password.data):
+            return {"is_logged_in":False, "reason":"密码错误，请重新输入"}
         else:
-            user = User.query.filter_by(username=form.username.data).first()
-            if user is None:
-                flash('无效的用户名')
-                return redirect(url_for('login'))
-            elif not user.check_password(form.password.data):
-                flash('密码错误，请重新输入')
-                return redirect(url_for('login'))
-            else:
-                login_user(user, remember=form.remember_me.data)
-                next_page = request.args.get('next')
-                if not next_page or url_parse(next_page).netloc != '':
-                    next_page = url_for('index')
-                return redirect(next_page)
+            return {"is_logged_in":True}
+    # 来自网页的表单提交
+    elif form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None:
+            flash('无效的用户名')
+            return redirect(url_for('login'))
+        elif not user.check_password(form.password.data):
+            flash('密码错误，请重新输入')
+            return redirect(url_for('login'))
+        else:
+            login_user(user, remember=form.remember_me.data)
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('index')
+            return redirect(next_page)
     return render_template('login.html', title='用户登录', form=form)
 
 @app.route('/logout')
@@ -70,7 +77,38 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
-    if form.validate_on_submit():
+
+    if form.is_from_client.data:
+        # 检验表单是否有空项
+        if not (form.username.data and form.password.data and form.identity.data):
+            return {
+                "is_registered": False,
+                "message": "表单信息不完整，请检查后再提交！",
+            } 
+        else:
+            # 检验用户名是否符合格式
+            if not check_user(form.username.data):
+                return {
+                    "is_registered": False,
+                    "message": "用户名格式错误"}
+            else:
+                # 检验用户名是否已经注册
+                user = User.query.filter_by(username=form.username.data).first()
+                if user is not None:
+                    return {
+                        "is_registered": False,
+                        "message": "用户名已被使用，请换一个用户名"}
+                else:
+                    user = User(username=form.username.data)
+                    user.set_password(form.password.data)
+                    user.identity = form.identity.data
+                    db.session.add(user)
+                    db.session.commit()
+                    return {
+                        "is_registered":True,
+                        "message":"恭喜，您已经成功注册Piculator会员！"}
+    
+    elif form.validate_on_submit():
         user = User(username=form.username.data)
         user.set_password(form.password.data)
         user.identity = form.identity.data
